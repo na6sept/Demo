@@ -28,8 +28,8 @@ jobs:
 
     - name: Tag image for local registry
       run: |
-        docker tag my-image-name:${IMAGE_TAG} localhost:8082/my-image-name:${IMAGE_TAG}
+        docker tag my-image-name:${{ env.IMAGE_TAG }} localhost:8082/my-image-name:${{ env.IMAGE_TAG }}
 
     - name: Push image to local registry
       run: |
-        docker push localhost:8082/my-image-name:${IMAGE_TAG}
+        docker push localhost:8082/my-image-name:${{ env.IMAGE_TAG }}
