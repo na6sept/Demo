@@ -22,8 +22,9 @@ jobs:
         echo "IMAGE_TAG=$unixTimestamp" >> $env:GITHUB_ENV
 
     - name: Build the Docker image
-      run: |
-        docker build . --file Dockerfile --tag "my-image-name:${IMAGE_TAG}"
+      run: docker build . --file Dockerfile --tag "my-image-name:${{ env.IMAGE_TAG }}"
+      env:
+        IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
     - name: Tag image for local registry
       run: |
