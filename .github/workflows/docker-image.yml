@@ -17,7 +17,9 @@ jobs:
 
     - name: Set image tag with timestamp
       id: tag
-      run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+      run: |
+        $unixTimestamp = [int](Get-Date -UFormat %s)
+        echo "IMAGE_TAG=$unixTimestamp" >> $env:GITHUB_ENV
 
     - name: Build the Docker image
       run: |
