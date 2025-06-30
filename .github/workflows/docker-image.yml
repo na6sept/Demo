@@ -15,19 +15,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Login to JFrog Docker registry
-      run: echo 'Zishan@123#$' | docker login 'http://localhost:8082/artifactory' -u 'admin' --password-stdin
-    
-    - name: Step 1 - Generate Timestamp
-      id: get_timestamp
-      shell: pwsh
-      run: |
-        $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-        echo "Generated timestamp: $timestamp"
-        echo "timestamp=$timestamp" >> $env:GITHUB_OUTPUT
-          
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag "Denodo-snapshot:${{ steps.get_timestamp.outputs.timestamp }}"
+    - name: Set image tag with timestamp
+      id: tag
+      run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
 
-    - name: Push Docker image to JFrog
-      run: docker push "http://localhost:8082/artifactory/denodo-dev/Denodo:snapshot"
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag "my-image-name:${IMAGE_TAG}"
+
+    - name: Tag image for local registry
+      run: |
+        docker tag my-image-name:${IMAGE_TAG} localhost:8082/my-image-name:${IMAGE_TAG}
+
+    - name: Push image to local registry
+      run: |
+        docker push localhost:8082/my-image-name:${IMAGE_TAG}
