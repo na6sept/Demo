@@ -15,7 +15,6 @@ jobs:
 
     - name: Set image tag with timestamp
       id: tag
-      shell: pwsh
       run: |
         $unixTimestamp = [int](Get-Date -UFormat %s)
         "IMAGE_TAG=$unixTimestamp" >> $env:GITHUB_ENV
